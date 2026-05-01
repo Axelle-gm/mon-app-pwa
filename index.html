@@ -332,9 +332,337 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
   .fu-op-row1{grid-template-columns:1fr !important;}
   .fu-op-row2{grid-template-columns:1fr !important;}
 }
+
+/* ═══════════════════════════════════════════════════════
+   UX PREMIUM — Micro-interactions, Animations, Feedback
+   Toutes basées sur transform/opacity → 0 repaint/reflow
+   200-300ms max — mobile first
+═══════════════════════════════════════════════════════ */
+
+/* ── KEYFRAMES ──────────────────────────────────────── */
+@keyframes ux-fadeSlideUp {
+  from { opacity:0; transform:translateY(12px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes ux-fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+@keyframes ux-scaleIn {
+  from { opacity:0; transform:scale(.94); }
+  to   { opacity:1; transform:scale(1); }
+}
+@keyframes ux-pulse-ring {
+  0%   { transform:scale(1);   opacity:.6; }
+  60%  { transform:scale(1.18);opacity:0;  }
+  100% { transform:scale(1.18);opacity:0;  }
+}
+@keyframes ux-shimmer {
+  0%   { background-position:-200% center; }
+  100% { background-position: 200% center; }
+}
+@keyframes ux-bounce-in {
+  0%   { transform:scale(.7);  opacity:0; }
+  70%  { transform:scale(1.05);opacity:1; }
+  100% { transform:scale(1);   opacity:1; }
+}
+@keyframes ux-slide-in-right {
+  from { opacity:0; transform:translateX(18px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes ux-slide-in-left {
+  from { opacity:0; transform:translateX(-18px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+@keyframes ux-toast-in {
+  from { opacity:0; transform:translateX(-50%) translateY(20px) scale(.92); }
+  to   { opacity:1; transform:translateX(-50%) translateY(0)    scale(1);   }
+}
+@keyframes ux-progress-stripe {
+  from { background-position:0 0; }
+  to   { background-position:40px 0; }
+}
+
+/* ── LOADER SPLASH ──────────────────────────────────── */
+#ux-loader {
+  position:fixed; inset:0; z-index:9999;
+  background:var(--bg);
+  display:flex; flex-direction:column;
+  align-items:center; justify-content:center; gap:20px;
+  transition:opacity .35s ease, transform .35s ease;
+}
+#ux-loader.hide {
+  opacity:0; pointer-events:none; transform:scale(1.04);
+}
+.ux-loader-logo {
+  width:64px; height:64px;
+  background:linear-gradient(135deg,var(--purple),#8B5CF6);
+  border-radius:20px;
+  display:flex; align-items:center; justify-content:center;
+  font-size:30px;
+  box-shadow:0 8px 28px rgba(124,103,238,.35);
+  animation:ux-bounce-in .5s cubic-bezier(.34,1.56,.64,1) both;
+}
+.ux-loader-bar-wrap {
+  width:120px; height:3px;
+  background:var(--border2); border-radius:3px; overflow:hidden;
+}
+.ux-loader-bar {
+  height:100%; width:0; border-radius:3px;
+  background:linear-gradient(90deg,var(--purple),var(--green));
+  transition:width .05s linear;
+}
+.ux-loader-text {
+  font-size:13px; color:var(--text2); font-weight:600; letter-spacing:.3px;
+  animation:ux-fadeIn .4s .3s both;
+}
+
+/* ── SECTION TRANSITION ──────────────────────────────── */
+.sec.on {
+  animation:ux-fadeSlideUp .22s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── BOUTONS — effet pression ────────────────────────── */
+button {
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  transition: transform .12s cubic-bezier(.34,1.56,.64,1),
+              box-shadow .15s ease,
+              background .15s ease,
+              border-color .15s ease !important;
+}
+button:active {
+  transform:scale(.96) !important;
+}
+button.primary:active {
+  transform:scale(.95) !important;
+  box-shadow:0 2px 6px rgba(124,103,238,.25) !important;
+}
+button.teal-btn:active {
+  transform:scale(.95) !important;
+}
+
+/* ── CARDS — hover élévation ─────────────────────────── */
+.card {
+  transition: box-shadow .2s ease, transform .2s ease !important;
+  will-change:transform;
+}
+.card:hover {
+  box-shadow:0 8px 28px rgba(124,99,234,.13) !important;
+  transform:translateY(-2px) !important;
+}
+@media(hover:none) {
+  /* Sur mobile (touch), pas de hover */
+  .card:hover { transform:none !important; box-shadow:var(--shadow) !important; }
+}
+.card:active {
+  transform:scale(.993) !important;
+  box-shadow:var(--shadow) !important;
+}
+
+/* ── INPUTS — focus premium ──────────────────────────── */
+input, select, textarea {
+  transition: border-color .18s ease,
+              box-shadow .18s ease,
+              transform .12s ease !important;
+}
+input:focus, select:focus, textarea:focus {
+  transform:translateY(-1px);
+}
+
+/* ── NAV TABS — indicator animé ─────────────────────── */
+.nb {
+  transition: color .15s ease, border-bottom-color .2s ease !important;
+  position:relative;
+}
+.nb::after {
+  content:'';
+  position:absolute; bottom:0; left:50%; right:50%;
+  height:2px;
+  background:var(--purple);
+  border-radius:2px;
+  transition:left .22s cubic-bezier(.4,0,.2,1),
+             right .22s cubic-bezier(.4,0,.2,1);
+}
+.nb.on::after { left:8px; right:8px; }
+
+/* ── BOTTOM NAV ITEMS ────────────────────────────────── */
+.bnav-item {
+  transition:transform .12s cubic-bezier(.34,1.56,.64,1) !important;
+  -webkit-tap-highlight-color:transparent;
+}
+.bnav-item:active { transform:scale(.88) !important; }
+.bnav-wrap {
+  transition:background .18s ease !important;
+}
+
+/* ── TOAST PREMIUM ───────────────────────────────────── */
+.toast {
+  animation:none;
+  border-radius:50px !important;
+  font-weight:600 !important;
+  letter-spacing:.1px;
+  box-shadow:0 8px 28px rgba(0,0,0,.22),
+             0 0 0 1px rgba(255,255,255,.08) !important;
+  backdrop-filter:blur(8px);
+}
+.toast.show {
+  animation:ux-toast-in .3s cubic-bezier(.34,1.56,.64,1) both !important;
+}
+
+/* ── METRIC CARDS (g4) — hover premium ──────────────── */
+.mc {
+  transition: transform .18s ease, box-shadow .18s ease !important;
+  cursor:default;
+}
+.mc:hover {
+  transform:translateY(-3px) !important;
+  box-shadow:0 6px 20px rgba(124,99,234,.14) !important;
+}
+@media(hover:none){.mc:hover{transform:none !important;}}
+
+/* ── IROWS (lignes de dépenses) — hover ─────────────── */
+.irow {
+  transition:background .15s ease !important;
+  border-radius:6px;
+}
+.irow:hover { background:var(--bg2) !important; }
+
+/* ── OBJECTIFS CARDS — hover ─────────────────────────── */
+.obj-row {
+  transition:transform .2s ease, box-shadow .2s ease !important;
+}
+@media(hover:hover){
+  .obj-row:hover {
+    transform:translateY(-2px) !important;
+    box-shadow:0 6px 22px rgba(124,99,234,.13) !important;
+  }
+}
+
+/* ── PROGRESS BARS — animation croissance ───────────── */
+.obj-prog-fill {
+  transition:width .65s cubic-bezier(.4,0,.2,1) !important;
+}
+
+/* ── FU RING — smooth ───────────────────────────────── */
+.prog-ring-bg {
+  transition:background .6s ease !important;
+}
+
+/* ── SCROLL FLUIDE ───────────────────────────────────── */
+.main {
+  scroll-behavior:smooth;
+  -webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+}
+
+/* ── RIPPLE EFFECT ───────────────────────────────────── */
+.ux-ripple-wrap {
+  position:relative; overflow:hidden;
+}
+.ux-ripple {
+  position:absolute;
+  border-radius:50%;
+  transform:scale(0);
+  animation:ux-ripple-anim .5s linear;
+  background:rgba(124,103,238,.18);
+  pointer-events:none;
+}
+@keyframes ux-ripple-anim {
+  to { transform:scale(4); opacity:0; }
+}
+
+/* ── HERO CARDS — parallax subtle ───────────────────── */
+.hero-budget, .fu-hero-card, .surp-hero {
+  transition:transform .2s ease, box-shadow .2s ease !important;
+}
+@media(hover:hover){
+  .hero-budget:hover  { transform:translateY(-2px) !important; }
+  .fu-hero-card:hover { transform:translateY(-2px) !important; }
+  .surp-hero:hover    { transform:translateY(-2px) !important; }
+}
+
+/* ── KPI DASHBOARD ───────────────────────────────────── */
+.kpi {
+  transition:transform .18s ease, box-shadow .18s ease !important;
+}
+@media(hover:hover){
+  .kpi:hover {
+    transform:translateY(-3px) !important;
+    box-shadow:0 6px 20px rgba(124,99,234,.14) !important;
+  }
+}
+
+/* ── SAVE BADGE ANIMATION ────────────────────────────── */
+.save-badge {
+  transition:opacity .2s ease, transform .2s ease;
+}
+
+/* ── HIST TABLE ROWS ─────────────────────────────────── */
+.ht tbody tr {
+  transition:background .15s ease !important;
+}
+
+/* ── SECTION TITLES (chdr) ───────────────────────────── */
+.chdr { animation:ux-fadeIn .2s ease both; }
+
+/* ── COACH MSG ───────────────────────────────────────── */
+.coach-msg {
+  animation:ux-slide-in-right .25s cubic-bezier(.22,1,.36,1) both !important;
+}
+
+/* ── INJECT BOX ──────────────────────────────────────── */
+.inject-box {
+  transition:box-shadow .2s ease, transform .2s ease !important;
+}
+.inject-box:hover {
+  box-shadow:0 6px 20px rgba(76,175,130,.18) !important;
+  transform:translateY(-1px) !important;
+}
+@media(hover:none){.inject-box:hover{transform:none !important;}}
+
+/* ── TAGS/PILLS ──────────────────────────────────────── */
+.pill, .bdg {
+  transition:transform .12s ease, box-shadow .12s ease !important;
+}
+
+/* ── SCROLLBAR CUSTOM ────────────────────────────────── */
+.main::-webkit-scrollbar { width:3px; }
+.main::-webkit-scrollbar-track { background:transparent; }
+.main::-webkit-scrollbar-thumb {
+  background:rgba(124,103,238,.25); border-radius:3px;
+}
+
+/* ── FU EVENTS HISTORY ───────────────────────────────── */
+.fu-evt {
+  transition:background .15s ease !important;
+  border-radius:6px;
+}
+.fu-evt:hover { background:var(--bg2) !important; }
+
+/* ── TOOLTIP ON SAVE BADGE ───────────────────────────── */
+@keyframes ux-badge-pop {
+  0%   { transform:scale(.7) translateY(4px); opacity:0; }
+  60%  { transform:scale(1.1) translateY(0);  opacity:1; }
+  100% { transform:scale(1)   translateY(0);  opacity:1; }
+}
+.save-badge[style*="display:inline-block"],
+.save-badge[style*="display: inline-block"] {
+  animation:ux-badge-pop .3s cubic-bezier(.34,1.56,.64,1) both;
+}
+
 </style>
 </head>
 <body>
+<!-- ── LOADER SPLASH ── -->
+<div id="ux-loader" role="status" aria-label="Chargement de l'application">
+  <div class="ux-loader-logo">💸</div>
+  <div class="ux-loader-bar-wrap">
+    <div class="ux-loader-bar" id="ux-loader-bar"></div>
+  </div>
+  <div class="ux-loader-text">Chargement...</div>
+</div>
+
 <div class="app-shell">
 
 <!-- ══════════ TOP BAR ══════════ -->
@@ -1828,6 +2156,244 @@ function bnavGo(id){
     if(id==='retraite')runSim();
   }
 }
+
+
+/* ═══════════════════════════════════════════════════════
+   UX PREMIUM — JS
+   Micro-interactions, Loader, Ripple, Toast enrichi,
+   Transitions onglets, Feedback dopamine
+═══════════════════════════════════════════════════════ */
+
+/* ── 1. LOADER ──────────────────────────────────────── */
+(function initLoader(){
+  const loader = document.getElementById('ux-loader');
+  const bar    = document.getElementById('ux-loader-bar');
+  if(!loader || !bar) return;
+
+  /* Barre de progression simulée */
+  let progress = 0;
+  const tick = setInterval(() => {
+    progress = Math.min(progress + Math.random() * 18, 90);
+    bar.style.width = progress + '%';
+  }, 80);
+
+  /* Masquer quand tout est prêt */
+  const hide = () => {
+    clearInterval(tick);
+    bar.style.width = '100%';
+    setTimeout(() => {
+      loader.classList.add('hide');
+      setTimeout(() => loader.remove(), 380);
+    }, 180);
+  };
+
+  if(document.readyState === 'complete') hide();
+  else window.addEventListener('load', hide);
+})();
+
+/* ── 2. RIPPLE sur les boutons .primary ─────────────── */
+document.addEventListener('pointerdown', e => {
+  const btn = e.target.closest('button.primary, button.teal-btn');
+  if(!btn) return;
+  const r  = document.createElement('span');
+  const rc = btn.getBoundingClientRect();
+  const d  = Math.max(rc.width, rc.height);
+  r.className = 'ux-ripple';
+  r.style.cssText = `
+    width:${d}px; height:${d}px;
+    left:${e.clientX - rc.left - d/2}px;
+    top:${e.clientY  - rc.top  - d/2}px;
+  `;
+  btn.classList.add('ux-ripple-wrap');
+  btn.appendChild(r);
+  r.addEventListener('animationend', () => r.remove());
+}, { passive:true });
+
+/* ── 3. HAPTIC FEEDBACK (mobile vibration) ───────────── */
+function haptic(pattern=[8]){
+  if('vibrate' in navigator) navigator.vibrate(pattern);
+}
+
+/* ── 4. TOAST enrichi ────────────────────────────────── */
+/* Override de showToast pour ajouter des icônes et haptic */
+const _origToast = window.showToast;
+window.showToast = function(msg, delay){
+  haptic([6]);
+  if(_origToast) _origToast(msg, delay || 2600);
+};
+
+/* ── 5. TRANSITION ONGLETS ───────────────────────────── */
+/* Override de tab() pour mémoriser la direction et animer */
+let _prevTabIdx = 0;
+const _tabOrder = ['budget','fu','surplus','objectifs','dashboard','retraite','history','conseils','profil'];
+
+const _origTabFn = window.tab;
+if(typeof _origTabFn === 'function'){
+  window.tab = function(id, btn){
+    const newIdx = _tabOrder.indexOf(id);
+    const dir    = newIdx >= _prevTabIdx ? 1 : -1;
+
+    /* Désactiver l'ancienne section avec fade-out */
+    const prev = document.querySelector('.sec.on');
+    if(prev){
+      prev.style.animation = 'none';
+      prev.style.opacity   = '0';
+      prev.style.transform = `translateX(${dir * -12}px)`;
+      prev.style.transition = 'opacity .12s ease, transform .12s ease';
+    }
+
+    setTimeout(() => {
+      if(prev){ prev.style.opacity=''; prev.style.transform=''; prev.style.transition=''; }
+      _origTabFn(id, btn);
+
+      /* La nouvelle section s'anime via CSS .sec.on */
+      const next = document.getElementById('s-' + id);
+      if(next){
+        next.style.animation = dir >= 0
+          ? 'ux-fadeSlideUp .22s cubic-bezier(.22,1,.36,1) both'
+          : 'ux-slide-in-left .22s cubic-bezier(.22,1,.36,1) both';
+      }
+      _prevTabIdx = newIdx >= 0 ? newIdx : _prevTabIdx;
+    }, 80);
+  };
+}
+
+/* ── 6. FEEDBACK DOPAMINE sur les actions métier ─────── */
+
+/* saveMonth → toast avec haptic fort */
+const _origSaveMonth = window.saveMonth;
+if(typeof _origSaveMonth === 'function'){
+  window.saveMonth = function(){
+    _origSaveMonth();
+    showToast('✅ Mois sauvegardé avec succès !');
+    haptic([10, 30, 10]);
+  };
+}
+
+/* addFUOp → toast spécifique selon injection/retrait */
+const _origAddFUOp = window.addFUOp;
+if(typeof _origAddFUOp === 'function'){
+  window.addFUOp = function(){
+    const type = document.getElementById('fu-op-type')?.value;
+    const amt  = parseFloat(document.getElementById('fu-op-amt')?.value)||0;
+    _origAddFUOp();
+    if(amt > 0){
+      if(type === 'retrait'){
+        showToast('↩️ Retrait enregistré — ' + amt.toLocaleString('fr-FR') + ' €');
+        haptic([8]);
+      } else {
+        showToast('💪 +' + amt.toLocaleString('fr-FR') + ' € ajoutés à ta réserve !');
+        haptic([8, 20, 8]);
+      }
+    }
+  };
+}
+
+/* confirmSurpFU → toast premium */
+const _origConfirm = window.confirmSurpFU;
+if(typeof _origConfirm === 'function'){
+  window.confirmSurpFU = function(){
+    const v = parseFloat(document.getElementById('surp-fu-inject')?.value)||0;
+    _origConfirm();
+    if(v > 0){
+      showToast('🔒 ' + v.toLocaleString('fr-FR') + ' € vers ta réserve de sécurité');
+      haptic([8, 20, 8]);
+    }
+  };
+}
+
+/* addObjectif → toast motivant */
+const _origAddObj = window.addObjectif;
+if(typeof _origAddObj === 'function'){
+  window.addObjectif = function(){
+    const name = document.getElementById('obj-name')?.value.trim();
+    _origAddObj();
+    if(name) {
+      showToast('🎯 Objectif "' + name + '" créé — go !');
+      haptic([6, 20, 6]);
+    }
+  };
+}
+
+/* addObjVersement → toast progression */
+const _origAddVers = window.addObjVersement;
+if(typeof _origAddObjVersement === 'undefined' && typeof _origAddVers === 'function'){
+  window.addObjVersement = function(objId){
+    const amtEl = document.getElementById('ov-amt-' + objId);
+    const amt   = parseFloat(amtEl?.value)||0;
+    _origAddVers(objId);
+    if(amt > 0) showToast('🔥 +' + amt.toLocaleString('fr-FR') + ' € — tu avances vers ton objectif !');
+    haptic([6]);
+  };
+}
+
+/* ── 7. INPUT FOCUS — scroll into view smooth ────────── */
+document.addEventListener('focusin', e => {
+  const el = e.target;
+  if(!['INPUT','SELECT','TEXTAREA'].includes(el.tagName)) return;
+  setTimeout(() => {
+    el.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'nearest' });
+  }, 150);
+}, { passive:true });
+
+/* ── 8. CARD TOUCH FEEDBACK (mobile) ────────────────── */
+document.addEventListener('touchstart', e => {
+  const card = e.target.closest('.card, .mc, .obj-row, .kpi');
+  if(!card) return;
+  card.style.transition = 'transform .08s ease, box-shadow .08s ease';
+  card.style.transform  = 'scale(.99)';
+}, { passive:true });
+
+document.addEventListener('touchend', e => {
+  const card = e.target.closest('.card, .mc, .obj-row, .kpi');
+  if(!card) return;
+  card.style.transform = '';
+  card.style.transition = '';
+}, { passive:true });
+
+/* ── 9. OBSERVER — animation d'entrée des éléments ──── */
+/* Les éléments qui entrent dans le viewport s'animent */
+if('IntersectionObserver' in window){
+  const uxObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if(!entry.isIntersecting) return;
+      const el = entry.target;
+      el.style.animation = 'ux-fadeSlideUp .28s cubic-bezier(.22,1,.36,1) both';
+      uxObserver.unobserve(el);
+    });
+  }, { threshold:0.08, rootMargin:'0px 0px -24px 0px' });
+
+  /* Observer les cartes déjà dans le DOM */
+  document.querySelectorAll('.card, .mc, .kpi, .obj-row').forEach(el => {
+    el.style.opacity = '0';
+    uxObserver.observe(el);
+  });
+
+  /* Re-observer après chaque rendu des onglets */
+  const _origRender = window.render;
+  if(typeof _origRender === 'function'){
+    window.render = function(){
+      _origRender();
+      setTimeout(() => {
+        document.querySelectorAll('.sec.on .mc').forEach(el => {
+          if(el.style.opacity === '0' || el.style.opacity === '') return;
+        });
+      }, 50);
+    };
+  }
+}
+
+/* ── 10. SAVE BADGE haptic ───────────────────────────── */
+const _origShowBadge = window.showSavedBadge;
+if(typeof _origShowBadge === 'function'){
+  window.showSavedBadge = function(){
+    _origShowBadge();
+    haptic([4]);
+  };
+}
+
+console.log('[UX] Micro-interactions chargées ✓');
+
 
 /* ── SYNC BOTTOM NAV WITH TAB ── */
 function syncNav(id){
