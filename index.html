@@ -325,6 +325,13 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
 
 /* ── OBJ HISTORY ── */
 #obj-hist-list div[style*="grid-template-columns"]{font-size:12px;}
+
+/* ── FU CALC GRID responsive ── */
+@media(max-width:560px){
+  .fu-calc-grid{grid-template-columns:1fr !important;}
+  .fu-op-row1{grid-template-columns:1fr !important;}
+  .fu-op-row2{grid-template-columns:1fr !important;}
+}
 </style>
 </head>
 <body>
@@ -437,19 +444,21 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
   </div>
   <div class="card">
     <div class="chdr"><span class="ct">🎯 Quel est mon objectif idéal ?</span></div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px;">
+    <!-- Champ brut caché — conservé pour la logique calcFU() -->
+    <input type="hidden" id="fu-brut" value="" />
+    <div class="fu-calc-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;">
       <div class="fld" style="margin-bottom:0;">
         <label>Salaire mensuel net (€)</label>
-        <input type="number" id="fu-net" placeholder="Ex : 2500" min="0" step="100" oninput="calcFU();saveLS()" />
-        <span style="font-size:10px;color:var(--text2);">Si variable, entrez votre moyenne</span>
-      </div>
-      <div class="fld" style="margin-bottom:0;">
-        <label>Revenu annuel brut (€) — optionnel</label>
-        <input type="number" id="fu-brut" placeholder="Ex : 36000" min="0" step="500" oninput="calcFU();saveLS()" />
+        <input type="number" id="fu-net" placeholder="Ex : 2500" min="0" step="100"
+               oninput="calcFU();saveLS()"
+               style="width:100%;font-size:15px;font-weight:600;" />
+        <span style="font-size:10px;color:var(--text2);margin-top:3px;display:block;">
+          Si variable → entrez votre moyenne mensuelle
+        </span>
       </div>
       <div class="fld" style="margin-bottom:0;">
         <label>Situation professionnelle</label>
-        <select id="fu-sit" onchange="calcFU();saveLS()">
+        <select id="fu-sit" onchange="calcFU();saveLS()" style="width:100%;">
           <option value="3">Salarié stable CDI — 3 mois</option>
           <option value="6" selected>Salarié avec famille — 6 mois</option>
           <option value="9">Indépendant / freelance — 9 mois</option>
@@ -458,7 +467,7 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
       </div>
       <div class="fld" style="margin-bottom:0;">
         <label>Nombre d'enfants à charge</label>
-        <select id="fu-enfants" onchange="calcFU();saveLS()">
+        <select id="fu-enfants" onchange="calcFU();saveLS()" style="width:100%;">
           <option value="0">Aucun enfant</option>
           <option value="1">1 enfant (+0,5 mois)</option>
           <option value="2">2 enfants (+1 mois)</option>
@@ -476,15 +485,29 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
     </div>
     <div id="fu-jauge" style="margin-bottom:14px;"></div>
     <div class="g3" id="fu-stats"></div>
-    <div id="fu-advice" style="margin-top:8px;"></div>
-    <div style="margin-top:14px;padding-top:14px;border-top:1.5px solid var(--border);">
-      <div style="font-weight:700;font-size:13px;margin-bottom:12px;">➕ J'alimente ou retire de ma réserve</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
-        <div class="fld" style="margin-bottom:0;"><label>Date</label><input type="date" id="fu-op-date" /></div>
-        <div class="fld" style="margin-bottom:0;"><label>Description</label><input type="text" id="fu-op-label" placeholder="Ex : Virement Livret A..." oninput="saveLS()" /></div>
-        <div class="fld" style="margin-bottom:0;"><label>Montant (€)</label><input type="number" id="fu-op-amt" placeholder="0" min="0" step="50" /></div>
-        <div class="fld" style="margin-bottom:0;"><label>Type</label>
-          <select id="fu-op-type" onchange="saveLS()">
+    <div id="fu-advice" style="margin-top:14px;"></div>
+    <div style="margin-top:28px;padding-top:22px;border-top:2px solid var(--border);">
+      <div style="font-weight:700;font-size:14px;margin-bottom:16px;color:var(--text);">➕ J'alimente ou retire de ma réserve</div>
+      <!-- Ligne 1 : Date + Description côte à côte -->
+      <div class="fu-op-row1" style="display:grid;grid-template-columns:160px 1fr;gap:12px;margin-bottom:12px;align-items:end;">
+        <div class="fld" style="margin-bottom:0;">
+          <label>Date</label>
+          <input type="date" id="fu-op-date" style="width:100%;" />
+        </div>
+        <div class="fld" style="margin-bottom:0;">
+          <label>Description</label>
+          <input type="text" id="fu-op-label" placeholder="Ex : Virement Livret A..." oninput="saveLS()" style="width:100%;" />
+        </div>
+      </div>
+      <!-- Ligne 2 : Montant + Type côte à côte -->
+      <div class="fu-op-row2" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;align-items:end;">
+        <div class="fld" style="margin-bottom:0;">
+          <label>Montant (€)</label>
+          <input type="number" id="fu-op-amt" placeholder="0" min="0" step="50" style="width:100%;" />
+        </div>
+        <div class="fld" style="margin-bottom:0;">
+          <label>Type d'opération</label>
+          <select id="fu-op-type" onchange="saveLS()" style="width:100%;">
             <option value="inject_manual">Injection manuelle</option>
             <option value="retrait">Retrait</option>
           </select>
