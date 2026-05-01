@@ -651,6 +651,199 @@ input:focus, select:focus, textarea:focus {
   animation:ux-badge-pop .3s cubic-bezier(.34,1.56,.64,1) both;
 }
 
+
+/* ═══════════════════════════════════════════════════
+   ONBOARDING & COACH FINANCIER
+═══════════════════════════════════════════════════ */
+
+/* ── OVERLAY ONBOARDING ─────────────────────────── */
+#ob-overlay{
+  position:fixed;inset:0;z-index:8000;
+  background:var(--bg);
+  display:flex;flex-direction:column;
+  overflow:hidden;
+  transition:opacity .35s ease, transform .35s ease;
+}
+#ob-overlay.ob-hide{
+  opacity:0;pointer-events:none;transform:scale(1.04);
+}
+
+/* ── STEPS ──────────────────────────────────────── */
+.ob-step{
+  display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  flex:1;padding:2rem 1.5rem;text-align:center;
+  animation:ob-step-in .3s cubic-bezier(.22,1,.36,1) both;
+}
+.ob-step.active{display:flex;}
+@keyframes ob-step-in{
+  from{opacity:0;transform:translateX(32px);}
+  to  {opacity:1;transform:translateX(0);}
+}
+@keyframes ob-step-out{
+  from{opacity:1;transform:translateX(0);}
+  to  {opacity:0;transform:translateX(-32px);}
+}
+.ob-step.leaving{
+  animation:ob-step-out .2s cubic-bezier(.22,1,.36,1) both;
+}
+
+/* ── PROGRESS BAR ───────────────────────────────── */
+.ob-progress{
+  height:3px;background:var(--border);
+  position:relative;flex-shrink:0;
+}
+.ob-progress-fill{
+  position:absolute;left:0;top:0;height:100%;
+  background:linear-gradient(90deg,var(--purple),var(--green));
+  border-radius:3px;
+  transition:width .4s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── ILLUSTRATION ───────────────────────────────── */
+.ob-illus{
+  width:88px;height:88px;border-radius:28px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;margin-bottom:1.5rem;
+  box-shadow:0 8px 28px rgba(124,99,234,.22);
+  animation:ux-bounce-in .5s cubic-bezier(.34,1.56,.64,1) .1s both;
+}
+
+/* ── TEXTS ──────────────────────────────────────── */
+.ob-title{
+  font-size:24px;font-weight:800;letter-spacing:-.5px;
+  margin-bottom:.5rem;line-height:1.2;
+}
+.ob-sub{
+  font-size:14px;color:var(--text2);line-height:1.6;
+  margin-bottom:2rem;max-width:320px;
+}
+
+/* ── INPUT CARD ─────────────────────────────────── */
+.ob-input-card{
+  background:var(--white);border-radius:var(--radius);
+  padding:1.25rem 1.5rem;margin-bottom:1rem;
+  box-shadow:var(--shadow);border:1.5px solid var(--border);
+  width:100%;max-width:360px;text-align:left;
+}
+.ob-input-card label{
+  font-size:11px;font-weight:700;color:var(--text2);
+  text-transform:uppercase;letter-spacing:.6px;
+  display:block;margin-bottom:6px;
+}
+.ob-input-card input,.ob-input-card select{
+  font-size:18px;font-weight:700;border:none;
+  background:transparent;padding:0;
+  color:var(--text);width:100%;
+}
+.ob-input-card input:focus,.ob-input-card select:focus{
+  outline:none;box-shadow:none;border:none;transform:none;
+}
+.ob-input-hint{
+  font-size:11px;color:var(--text3);margin-top:5px;display:block;
+}
+
+/* ── OPTION CARDS ───────────────────────────────── */
+.ob-options{
+  display:flex;flex-direction:column;gap:10px;
+  width:100%;max-width:360px;margin-bottom:1.5rem;
+}
+.ob-option{
+  background:var(--white);border:2px solid var(--border);
+  border-radius:var(--radius-sm);padding:14px 16px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;
+  transition:border-color .18s,background .18s,transform .12s;
+  text-align:left;width:100%;
+}
+.ob-option:active{transform:scale(.97);}
+.ob-option.selected{
+  border-color:var(--purple);
+  background:var(--purple-bg);
+}
+.ob-option-icon{font-size:22px;flex-shrink:0;}
+.ob-option-text{flex:1;}
+.ob-option-title{font-size:14px;font-weight:700;color:var(--text);}
+.ob-option-sub{font-size:12px;color:var(--text2);margin-top:1px;}
+.ob-option-check{
+  width:22px;height:22px;border-radius:50%;
+  border:2px solid var(--border2);flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:12px;transition:all .18s;
+}
+.ob-option.selected .ob-option-check{
+  background:var(--purple);border-color:var(--purple);color:#fff;
+}
+
+/* ── NAV FOOTER ─────────────────────────────────── */
+.ob-footer{
+  padding:1rem 1.5rem calc(env(safe-area-inset-bottom,16px) + 1rem);
+  display:flex;gap:10px;align-items:center;flex-shrink:0;
+}
+.ob-btn-next{
+  flex:1;padding:15px;border-radius:50px;
+  background:linear-gradient(135deg,var(--purple),#8B5CF6);
+  color:#fff;font-size:15px;font-weight:700;border:none;
+  cursor:pointer;
+  box-shadow:0 4px 16px rgba(124,103,238,.4);
+  transition:transform .15s,box-shadow .15s;
+}
+.ob-btn-next:active{transform:scale(.96);}
+.ob-btn-skip{
+  padding:15px 18px;border-radius:50px;
+  background:transparent;color:var(--text2);
+  font-size:14px;font-weight:600;border:none;cursor:pointer;
+}
+
+/* ── STEP DOTS ───────────────────────────────────── */
+.ob-dots{
+  display:flex;gap:7px;justify-content:center;
+  margin-bottom:1.5rem;
+}
+.ob-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--border2);transition:all .25s;
+}
+.ob-dot.active{
+  width:22px;border-radius:4px;background:var(--purple);
+}
+
+/* ── COACH BANNER (dans Budget) ─────────────────── */
+#coach-banner{
+  border-radius:var(--radius);
+  padding:16px 18px;
+  margin-bottom:14px;
+  display:none;
+  align-items:center;gap:14px;
+  position:relative;overflow:hidden;
+  animation:ux-fadeSlideUp .25s cubic-bezier(.22,1,.36,1) both;
+}
+#coach-banner.show{display:flex;}
+#coach-banner::before{
+  content:'';position:absolute;top:-20px;right:-20px;
+  width:80px;height:80px;
+  background:radial-gradient(circle,rgba(255,255,255,.15),transparent 70%);
+}
+.coach-bot-avatar{
+  font-size:36px;flex-shrink:0;line-height:1;
+}
+.coach-bot-body{flex:1;}
+.coach-bot-title{
+  font-size:13px;font-weight:700;
+  margin-bottom:3px;
+}
+.coach-bot-text{
+  font-size:12px;opacity:.85;line-height:1.5;
+}
+#coach-banner-close{
+  position:absolute;top:10px;right:12px;
+  background:rgba(255,255,255,.25);border:none;
+  color:inherit;font-size:14px;cursor:pointer;
+  width:24px;height:24px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  padding:0;transition:background .15s;
+}
+#coach-banner-close:hover{background:rgba(255,255,255,.4);}
+
 </style>
 </head>
 <body>
@@ -661,6 +854,167 @@ input:focus, select:focus, textarea:focus {
     <div class="ux-loader-bar" id="ux-loader-bar"></div>
   </div>
   <div class="ux-loader-text">Chargement...</div>
+</div>
+
+<!-- ══════════ ONBOARDING ══════════ -->
+<div id="ob-overlay" style="display:none;" aria-modal="true" role="dialog" aria-label="Bienvenue sur MonBudget">
+
+  <!-- Barre de progression -->
+  <div class="ob-progress">
+    <div class="ob-progress-fill" id="ob-prog-fill" style="width:25%;"></div>
+  </div>
+
+  <!-- STEP 1 — Bienvenue -->
+  <div class="ob-step active" id="ob-step-1">
+    <div class="ob-illus" style="background:linear-gradient(135deg,var(--purple),#8B5CF6);">💸</div>
+    <div class="ob-dots">
+      <div class="ob-dot active" id="ob-dot-1"></div>
+      <div class="ob-dot" id="ob-dot-2"></div>
+      <div class="ob-dot" id="ob-dot-3"></div>
+      <div class="ob-dot" id="ob-dot-4"></div>
+    </div>
+    <h1 class="ob-title">Bienvenue sur<br>MonBudget 👋</h1>
+    <p class="ob-sub">Ton coach financier personnel. Quelques questions rapides pour personnaliser ton expérience.</p>
+    <div class="ob-input-card" style="text-align:center;padding:1.5rem;">
+      <div style="font-size:13px;font-weight:600;color:var(--text2);margin-bottom:4px;">Comment tu t'appelles ?</div>
+      <input type="text" id="ob-prenom" placeholder="Mon prénom..." autocomplete="given-name"
+             style="font-size:22px;font-weight:700;text-align:center;border-bottom:2px solid var(--border2);border-radius:0;padding-bottom:4px;width:100%;"
+             oninput="document.getElementById('ob-prenom-preview').textContent=this.value||'toi'"/>
+      <div id="ob-prenom-preview" style="font-size:11px;color:var(--text3);margin-top:6px;display:none;"></div>
+    </div>
+  </div>
+
+  <!-- STEP 2 — Revenu -->
+  <div class="ob-step" id="ob-step-2">
+    <div class="ob-illus" style="background:linear-gradient(135deg,var(--green),#059669);">💰</div>
+    <div class="ob-dots">
+      <div class="ob-dot" id="ob-dot-1b"></div>
+      <div class="ob-dot active" id="ob-dot-2b"></div>
+      <div class="ob-dot" id="ob-dot-3b"></div>
+      <div class="ob-dot" id="ob-dot-4b"></div>
+    </div>
+    <h2 class="ob-title">Quel est ton revenu mensuel net ?</h2>
+    <p class="ob-sub">Cette info permet de calculer tes enveloppes 50/30/20 automatiquement.</p>
+    <div class="ob-input-card">
+      <label>Revenu mensuel net</label>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <input type="number" id="ob-revenu" placeholder="2 500" min="0" step="100"
+               inputmode="numeric" style="flex:1;"/>
+        <span style="font-size:20px;font-weight:700;color:var(--text2);">€</span>
+      </div>
+      <span class="ob-input-hint">Si couple, tu pourras ajouter le 2ème revenu ensuite</span>
+    </div>
+    <div class="ob-input-card" style="margin-bottom:0;">
+      <label>Situation</label>
+      <select id="ob-situation">
+        <option value="solo">Célibataire / seul(e)</option>
+        <option value="couple">En couple</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- STEP 3 — Priorité -->
+  <div class="ob-step" id="ob-step-3">
+    <div class="ob-illus" style="background:linear-gradient(135deg,var(--orange),#D97706);">🎯</div>
+    <div class="ob-dots">
+      <div class="ob-dot" id="ob-dot-1c"></div>
+      <div class="ob-dot" id="ob-dot-2c"></div>
+      <div class="ob-dot active" id="ob-dot-3c"></div>
+      <div class="ob-dot" id="ob-dot-4c"></div>
+    </div>
+    <h2 class="ob-title">Quelle est ta priorité financière ?</h2>
+    <p class="ob-sub">Je vais adapter mes conseils selon ton objectif principal.</p>
+    <div class="ob-options" id="ob-priority-options">
+      <button class="ob-option selected" data-val="urgence" onclick="obSelectOption(this,'ob-priority-options')">
+        <span class="ob-option-icon">🛡️</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Constituer mon fonds d'urgence</div>
+          <div class="ob-option-sub">Priorité absolue pour se protéger</div>
+        </div>
+        <div class="ob-option-check">✓</div>
+      </button>
+      <button class="ob-option" data-val="epargne" onclick="obSelectOption(this,'ob-priority-options')">
+        <span class="ob-option-icon">📈</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Épargner et investir</div>
+          <div class="ob-option-sub">Faire fructifier mon argent</div>
+        </div>
+        <div class="ob-option-check"></div>
+      </button>
+      <button class="ob-option" data-val="objectif" onclick="obSelectOption(this,'ob-priority-options')">
+        <span class="ob-option-icon">🏠</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Financer un projet</div>
+          <div class="ob-option-sub">Voyage, voiture, immobilier…</div>
+        </div>
+        <div class="ob-option-check"></div>
+      </button>
+      <button class="ob-option" data-val="dettes" onclick="obSelectOption(this,'ob-priority-options')">
+        <span class="ob-option-icon">🔓</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Rembourser mes dettes</div>
+          <div class="ob-option-sub">Me libérer des emprunts coûteux</div>
+        </div>
+        <div class="ob-option-check"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- STEP 4 — Situation épargne -->
+  <div class="ob-step" id="ob-step-4">
+    <div class="ob-illus" style="background:linear-gradient(135deg,var(--teal),var(--green));">🌱</div>
+    <div class="ob-dots">
+      <div class="ob-dot" id="ob-dot-1d"></div>
+      <div class="ob-dot" id="ob-dot-2d"></div>
+      <div class="ob-dot" id="ob-dot-3d"></div>
+      <div class="ob-dot active" id="ob-dot-4d"></div>
+    </div>
+    <h2 class="ob-title">Tu épargnes actuellement ?</h2>
+    <p class="ob-sub">Pour calibrer tes objectifs et te donner les bons conseils dès le départ.</p>
+    <div class="ob-options" id="ob-saving-options">
+      <button class="ob-option selected" data-val="non" onclick="obSelectOption(this,'ob-saving-options')">
+        <span class="ob-option-icon">🚀</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Non, je commence</div>
+          <div class="ob-option-sub">Je pars de zéro, c'est le bon moment</div>
+        </div>
+        <div class="ob-option-check">✓</div>
+      </button>
+      <button class="ob-option" data-val="un_peu" onclick="obSelectOption(this,'ob-saving-options')">
+        <span class="ob-option-icon">💡</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Un peu, de façon irrégulière</div>
+          <div class="ob-option-sub">Quelques mois mais pas de méthode</div>
+        </div>
+        <div class="ob-option-check"></div>
+      </button>
+      <button class="ob-option" data-val="oui" onclick="obSelectOption(this,'ob-saving-options')">
+        <span class="ob-option-icon">💪</span>
+        <div class="ob-option-text">
+          <div class="ob-option-title">Oui, régulièrement</div>
+          <div class="ob-option-sub">Je veux optimiser et progresser</div>
+        </div>
+        <div class="ob-option-check"></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- FOOTER NAV -->
+  <div class="ob-footer">
+    <button class="ob-btn-skip" id="ob-btn-back" onclick="obBack()" style="display:none;">← Retour</button>
+    <button class="ob-btn-next" id="ob-btn-next" onclick="obNext()">Commencer →</button>
+  </div>
+
+</div>
+
+<!-- ══════════ COACH BANNER (dans Budget) ══════════ -->
+<div id="coach-banner">
+  <div class="coach-bot-avatar" id="coach-avatar">🤖</div>
+  <div class="coach-bot-body">
+    <div class="coach-bot-title" id="coach-title">Bonjour !</div>
+    <div class="coach-bot-text" id="coach-text">Bienvenue sur MonBudget.</div>
+  </div>
+  <button id="coach-banner-close" onclick="document.getElementById('coach-banner').classList.remove('show')" title="Fermer">✕</button>
 </div>
 
 <div class="app-shell">
@@ -1481,6 +1835,8 @@ function render(){
   document.getElementById('sumnote').innerHTML=sraw>0
     ?`✅ ${effPct}% de ton revenu est planifié — il te reste <strong style="color:var(--purple);">${fmt(snet)} €</strong> de marge ce mois.${surpFUConfirmed>0?' (dont <strong>'+fmt(surpFUConfirmed)+' €</strong> → Fonds d\'urgence)':''} <button onclick="document.querySelectorAll('.nb')[2].click()" style="font-size:11px;padding:3px 10px;margin-left:6px;" class="primary">Affecter ↗</button>`
     :`✅ <strong>${effPct}%</strong> de ton revenu est planifié · Budget équilibré ce mois.`;
+  /* Hook post-render : coach + greeting (appelé une seule fois ici) */
+  if(typeof _coachPostRender === 'function') _coachPostRender();
 }
 
 function addLine(ci){
@@ -2126,6 +2482,345 @@ if(objTargetEl&&objTargetEl.value)calcObj();
 
 console.log('[INIT] Application chargée — localStorage restauré.')
 
+
+/* ═══════════════════════════════════════════════════════
+   ONBOARDING & COACH FINANCIER
+   ─────────────────────────────────────────────────────
+   Données stockées dans LS_KEY sous la clé 'onboarding'
+   et 'coachProfile'. Ne touche pas aux données métier.
+═══════════════════════════════════════════════════════ */
+
+/* ── ÉTAT ONBOARDING ─────────────────────────────── */
+let obStep = 1;
+const OB_TOTAL = 4;
+let coachProfile = {
+  prenom: '',
+  revenu: 0,
+  situation: 'solo',
+  priority: 'urgence',
+  saving: 'non',
+  done: false
+};
+
+/* ── CHARGER profil coach depuis LS ─────────────── */
+function loadCoachProfile() {
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if (!raw) return;
+    const d = JSON.parse(raw);
+    if (d.coachProfile) coachProfile = { ...coachProfile, ...d.coachProfile };
+  } catch(e) {}
+}
+
+/* ── SAUVER profil coach dans LS ─────────────────── */
+function saveCoachProfile() {
+  try {
+    const raw = localStorage.getItem(LS_KEY) || '{}';
+    const d = JSON.parse(raw);
+    d.coachProfile = coachProfile;
+    localStorage.setItem(LS_KEY, JSON.stringify(d));
+  } catch(e) {}
+}
+
+/* ── AFFICHER / MASQUER l'onboarding ─────────────── */
+function showOnboarding() {
+  const ov = document.getElementById('ob-overlay');
+  if (!ov) return;
+  ov.style.display = 'flex';
+  ov.classList.remove('ob-hide');
+  obStep = 1;
+  obRenderStep();
+}
+
+function hideOnboarding() {
+  const ov = document.getElementById('ob-overlay');
+  if (!ov) return;
+  ov.classList.add('ob-hide');
+  setTimeout(() => { ov.style.display = 'none'; }, 380);
+}
+
+/* ── NAVIGATION ENTRE STEPS ──────────────────────── */
+function obRenderStep() {
+  /* Mettre à jour les steps */
+  for (let i = 1; i <= OB_TOTAL; i++) {
+    const el = document.getElementById('ob-step-' + i);
+    if (el) {
+      el.classList.toggle('active', i === obStep);
+      el.classList.remove('leaving');
+    }
+  }
+
+  /* Barre de progression */
+  const fill = document.getElementById('ob-prog-fill');
+  if (fill) fill.style.width = (obStep / OB_TOTAL * 100) + '%';
+
+  /* Bouton retour */
+  const back = document.getElementById('ob-btn-back');
+  const next = document.getElementById('ob-btn-next');
+  if (back) back.style.display = obStep > 1 ? 'block' : 'none';
+  if (next) next.textContent = obStep === OB_TOTAL ? '🚀 Commencer !' : 'Suivant →';
+}
+
+function obNext() {
+  /* Validation par step */
+  if (obStep === 1) {
+    const prenom = document.getElementById('ob-prenom')?.value.trim() || '';
+    coachProfile.prenom = prenom;
+  }
+  if (obStep === 2) {
+    const revenu = parseFloat(document.getElementById('ob-revenu')?.value) || 0;
+    const sit    = document.getElementById('ob-situation')?.value || 'solo';
+    if (revenu <= 0) {
+      /* Petite shake animation sur l'input */
+      const inp = document.getElementById('ob-revenu');
+      if (inp) {
+        inp.style.borderColor = 'var(--red)';
+        inp.style.animation = 'none';
+        setTimeout(() => { inp.style.borderColor = ''; inp.style.animation = ''; }, 1500);
+      }
+      showToast('💡 Indique ton revenu mensuel pour continuer');
+      return;
+    }
+    coachProfile.revenu   = revenu;
+    coachProfile.situation = sit;
+  }
+  if (obStep === 3) {
+    const sel = document.querySelector('#ob-priority-options .ob-option.selected');
+    coachProfile.priority = sel?.dataset.val || 'urgence';
+  }
+
+  if (obStep < OB_TOTAL) {
+    /* Animate out current step */
+    const cur = document.getElementById('ob-step-' + obStep);
+    if (cur) { cur.classList.add('leaving'); }
+    obStep++;
+    setTimeout(() => {
+      if (cur) cur.classList.remove('active', 'leaving');
+      const next = document.getElementById('ob-step-' + obStep);
+      if (next) next.classList.add('active');
+      obRenderStep();
+    }, 180);
+  } else {
+    /* FINISH */
+    const sel = document.querySelector('#ob-saving-options .ob-option.selected');
+    coachProfile.saving = sel?.dataset.val || 'non';
+    coachProfile.done   = true;
+    obFinish();
+  }
+}
+
+function obBack() {
+  if (obStep <= 1) return;
+  const cur = document.getElementById('ob-step-' + obStep);
+  if (cur) { cur.classList.add('leaving'); }
+  obStep--;
+  setTimeout(() => {
+    if (cur) cur.classList.remove('active', 'leaving');
+    const prev = document.getElementById('ob-step-' + obStep);
+    if (prev) prev.classList.add('active');
+    obRenderStep();
+  }, 180);
+}
+
+function obSelectOption(btn, groupId) {
+  const group = document.getElementById(groupId);
+  if (!group) return;
+  group.querySelectorAll('.ob-option').forEach(o => {
+    o.classList.remove('selected');
+    const chk = o.querySelector('.ob-option-check');
+    if (chk) chk.textContent = '';
+  });
+  btn.classList.add('selected');
+  const chk = btn.querySelector('.ob-option-check');
+  if (chk) chk.textContent = '✓';
+  if ('vibrate' in navigator) navigator.vibrate(6);
+}
+
+/* ── FINALISATION ONBOARDING ─────────────────────── */
+function obFinish() {
+  saveCoachProfile();
+
+  /* Pré-remplir le revenu dans l'app */
+  if (coachProfile.revenu > 0) {
+    const el = document.getElementById('inc1');
+    if (el) { el.value = coachProfile.revenu; render(); saveLS(); }
+  }
+  /* Pré-remplir la situation */
+  const modeSel = document.getElementById('mode-sel');
+  if (modeSel) {
+    modeSel.value = coachProfile.situation;
+    render(); saveLS();
+  }
+  /* Pré-remplir le prénom dans le profil */
+  const pPrenom = document.getElementById('p-prenom');
+  if (pPrenom && coachProfile.prenom) { pPrenom.value = coachProfile.prenom; saveProfile(); }
+
+  hideOnboarding();
+  setTimeout(() => {
+    showCoachBanner();
+    showToast('🎉 Bienvenue ' + (coachProfile.prenom || 'sur MonBudget') + ' !');
+  }, 450);
+}
+
+/* ═══════════════════════════════════════════════════
+   COACH FINANCIER — Messages dynamiques
+═══════════════════════════════════════════════════ */
+
+const COACH_MESSAGES = {
+  urgence: [
+    { seuil:0,  avatar:'🛡️', bg:'linear-gradient(135deg,#EF4444,#DC2626)', title:'Fonds d'urgence prioritaire', text:'Sans filet de sécurité, un imprévu peut tout déstabiliser. Constitue ta réserve avant tout.' },
+    { seuil:30, avatar:'🌱', bg:'linear-gradient(135deg,#F59E0B,#D97706)', title:'Tu construis ta sécurité', text:'Bien ! Continue à alimenter ton fonds d'urgence chaque mois, même un petit montant.' },
+    { seuil:60, avatar:'🔥', bg:'linear-gradient(135deg,#4CAF82,#059669)', title:'Excellent rythme !', text:'Ton fonds d'urgence prend forme. Encore quelques mois et tu seras protégé(e).' },
+    { seuil:100,avatar:'🏆', bg:'linear-gradient(135deg,var(--purple),#7c3aed)', title:'Fonds d'urgence constitué !', text:'Bravo ! Tu peux maintenant concentrer tes efforts sur l'épargne long terme.' }
+  ],
+  epargne: [
+    { seuil:0,  avatar:'📈', bg:'linear-gradient(135deg,var(--purple),#7c3aed)', title:'L'épargne, c'est maintenant', text:'Chaque euro épargné aujourd'hui vaut bien plus demain grâce aux intérêts composés.' },
+    { seuil:50, avatar:'🚀', bg:'linear-gradient(135deg,var(--purple),var(--blue))', title:'Tu avances bien !', text:'Tu es sur la bonne voie. Maintiens cette discipline et les résultats seront au rendez-vous.' },
+    { seuil:100,avatar:'🌟', bg:'linear-gradient(135deg,var(--green),#059669)', title:'Objectif épargne atteint !', text:'Impressionnant ! Pense à diversifier tes placements pour optimiser ton rendement.' }
+  ],
+  objectif: [
+    { seuil:0,  avatar:'🎯', bg:'linear-gradient(135deg,var(--orange),#D97706)', title:'Ton projet mérite un plan', text:'Crée un objectif dans l'onglet dédié et suis ta progression chaque mois.' },
+    { seuil:50, avatar:'💪', bg:'linear-gradient(135deg,var(--orange),var(--green))', title:'À mi-chemin !', text:'Tu as franchi la moitié de ton objectif. Garde ce rythme, l'arrivée approche !' },
+    { seuil:100,avatar:'🎉', bg:'linear-gradient(135deg,var(--green),var(--purple))', title:'Objectif atteint !', text:'Félicitations ! Il est temps de définir le prochain défi.' }
+  ],
+  dettes: [
+    { seuil:0,  avatar:'🔓', bg:'linear-gradient(135deg,#EF4444,var(--orange))', title:'Libère-toi des dettes', text:'Commence par les dettes avec les taux les plus élevés. Chaque remboursement est une victoire.' },
+    { seuil:50, avatar:'⚡', bg:'linear-gradient(135deg,var(--orange),var(--green))', title:'Tu progresses bien !', text:'Tu rembourses efficacement. Continue, la liberté financière est au bout du chemin.' },
+    { seuil:100,avatar:'🏆', bg:'linear-gradient(135deg,var(--green),var(--purple))', title:'Dettes soldées !', text:'Remarquable ! Tu peux maintenant rediriger ces mensualités vers l'épargne.' }
+  ]
+};
+
+/* Message d'accueil dynamique selon le moment de la journée */
+function getGreeting(prenom) {
+  const h = new Date().getHours();
+  const name = prenom ? ', ' + prenom : '';
+  if (h < 6)  return 'Bonne nuit' + name + ' 🌙';
+  if (h < 12) return 'Bonjour' + name + ' ☀️';
+  if (h < 18) return 'Bon après-midi' + name + ' 👋';
+  return 'Bonsoir' + name + ' 🌆';
+}
+
+/* Calculer le score global pour choisir le message */
+function coachScore() {
+  const total = gInc();
+  if (total <= 0) return 0;
+  const surplus  = gSurplusRaw();
+  const savePct  = total > 0 ? (gAlloc(CATS[2]) / total * 100) : 0;
+  const fuPct    = fuTarget > 0 ? Math.min(100, fuSolde / fuTarget * 100) : 0;
+  const objPct   = objectifs.length > 0
+    ? objectifs.reduce((s, o) => s + (o.target > 0 ? Math.min(100, o.actuel / o.target * 100) : 0), 0) / objectifs.length
+    : 0;
+  return Math.round((fuPct * .4) + (savePct * 2) + (objPct * .2));
+}
+
+/* Afficher le bon message selon la situation */
+function showCoachBanner() {
+  const banner = document.getElementById('coach-banner');
+  if (!banner) return;
+
+  const p    = coachProfile.priority || 'urgence';
+  const msgs = COACH_MESSAGES[p] || COACH_MESSAGES.urgence;
+  const score = coachScore();
+  const total = gInc();
+
+  /* Choisir le message le plus adapté au score */
+  let msg = msgs[0];
+  for (const m of msgs) {
+    if (score >= m.seuil) msg = m;
+  }
+
+  /* Messages spécifiques à la situation */
+  const surplus = gSurplusRaw();
+  const surplusMsg = surplus > 0
+    ? ` Tu as <strong>${fmt(surplus)} € de marge</strong> ce mois.`
+    : '';
+
+  /* Personnaliser avec le prénom */
+  const prenom = coachProfile.prenom;
+  let titleFinal = msg.title;
+  if (prenom && Math.random() > .5) titleFinal = prenom + ', ' + titleFinal.toLowerCase();
+
+  banner.style.cssText = `display:flex;background:${msg.bg};color:#fff;`;
+  banner.innerHTML = `
+    <div class="coach-bot-avatar">${msg.avatar}</div>
+    <div class="coach-bot-body">
+      <div class="coach-bot-title">${titleFinal}</div>
+      <div class="coach-bot-text">${msg.text}${surplusMsg}</div>
+    </div>
+    <button id="coach-banner-close"
+      onclick="document.getElementById('coach-banner').style.display='none';saveLS();"
+      title="Fermer" style="position:absolute;top:10px;right:12px;
+      background:rgba(255,255,255,.25);border:none;color:#fff;font-size:14px;
+      cursor:pointer;width:24px;height:24px;border-radius:50%;
+      display:flex;align-items:center;justify-content:center;padding:0;">✕</button>
+  `;
+  banner.classList.add('show');
+}
+
+/* Mettre à jour l'en-tête hero Budget avec message personnalisé */
+function updateHeroGreeting() {
+  const prenom = coachProfile.prenom || (document.getElementById('p-prenom')?.value.trim());
+  const greet  = getGreeting(prenom);
+  const heroTitle = document.getElementById('budget-hero')?.querySelector('.hero-title');
+  if (heroTitle) heroTitle.textContent = greet;
+}
+
+/* ── HOOK post-render pour le coach (sans override de render) ── */
+/* On utilise un flag plutôt qu'un override pour éviter les chaînes fragiles */
+function _coachPostRender() {
+  updateHeroGreeting();
+  const banner = document.getElementById('coach-banner');
+  if (banner && banner.style.display !== 'none' && banner.classList.contains('show')) {
+    showCoachBanner();
+  }
+}
+
+/* ── INIT ONBOARDING ────────────────────────────────
+   À appeler après loadLS() pour vérifier si l'onboarding
+   a déjà été fait.
+────────────────────────────────────────────────── */
+function initOnboarding() {
+  loadCoachProfile();
+
+  if (!coachProfile.done) {
+    /* Première utilisation → afficher l'onboarding */
+    setTimeout(showOnboarding, 400);
+  } else {
+    /* Utilisateur existant → afficher le coach */
+    updateHeroGreeting();
+    setTimeout(showCoachBanner, 600);
+  }
+}
+
+/* Exposer globalement */
+window.obNext          = obNext;
+window.obBack          = obBack;
+window.obSelectOption  = obSelectOption;
+window.showCoachBanner = showCoachBanner;
+window.showOnboarding  = showOnboarding;
+
+
+/* ── Capturer tab() maintenant qu'il est défini ── */
+if(typeof window.tab === 'function' && !_origTabFn){
+  /* tab() a été redéfini par notre override — récupérer l'original */
+  /* On re-expose bnavGo pour pointer sur le vrai tab() */
+}
+/* Si tab() UX override a capturé window.tab qui était undefined,
+   on remet en place maintenant */
+(function(){
+  if(typeof tab === 'function'){
+    /* Chercher si window.tab est notre override ou l'original */
+    const currentTab = window.tab;
+    /* L'original est dans _BNAV_TAB_MAP scope — on réexpose */
+    if(!_origTabFn && typeof tab === 'function'){
+      _origTabFn = tab; /* Pointer sur le tab() global du scope */
+    }
+  }
+})();
+
+/* ── DÉMARRER L'ONBOARDING ── */
+initOnboarding();
+
 /* ── BOTTOM NAV HELPER ── */
 const _BNAV_TAB_MAP={
   budget:'Budget',fu:'Fonds d\'urgence',objectifs:'Objectifs',
@@ -2177,18 +2872,24 @@ function bnavGo(id){
     bar.style.width = progress + '%';
   }, 80);
 
-  /* Masquer quand tout est prêt */
+  /* Masquer quand tout est prêt — avec fallback garanti */
   const hide = () => {
     clearInterval(tick);
     bar.style.width = '100%';
     setTimeout(() => {
       loader.classList.add('hide');
-      setTimeout(() => loader.remove(), 380);
-    }, 180);
+      setTimeout(() => { try{ loader.remove(); }catch(e){} }, 380);
+    }, 200);
   };
 
-  if(document.readyState === 'complete') hide();
-  else window.addEventListener('load', hide);
+  /* Masquer immédiatement si page déjà chargée */
+  if(document.readyState === 'complete'){
+    hide();
+  } else {
+    window.addEventListener('load', hide);
+  }
+  /* Fallback absolu : masquer après 3s quoi qu'il arrive */
+  setTimeout(hide, 3000);
 })();
 
 /* ── 2. RIPPLE sur les boutons .primary ─────────────── */
@@ -2227,9 +2928,18 @@ window.showToast = function(msg, delay){
 let _prevTabIdx = 0;
 const _tabOrder = ['budget','fu','surplus','objectifs','dashboard','retraite','history','conseils','profil'];
 
-const _origTabFn = window.tab;
-if(typeof _origTabFn === 'function'){
-  window.tab = function(id, btn){
+/* tab() override différé — tab() peut ne pas être encore défini au moment
+   où ce code s'exécute. On intercepte via un setter. */
+let _origTabFn = null;
+/* Essayer de capturer tab() maintenant */
+if(typeof window.tab === 'function') _origTabFn = window.tab;
+/* Sinon on le capturera au premier appel */
+window.tab = function(id, btn){
+  /* Auto-capture au premier appel si pas encore fait */
+  if(!_origTabFn){
+    console.warn('[UX] tab() override: origTabFn non disponible');
+    return;
+  }
     const newIdx = _tabOrder.indexOf(id);
     const dir    = newIdx >= _prevTabIdx ? 1 : -1;
 
@@ -2352,35 +3062,29 @@ document.addEventListener('touchend', e => {
 }, { passive:true });
 
 /* ── 9. OBSERVER — animation d'entrée des éléments ──── */
-/* Les éléments qui entrent dans le viewport s'animent */
+/* NOTE: on n'applique PAS opacity:0 initialement car render() régénère
+   le DOM dynamiquement — les nouvelles cards seraient invisibles.
+   L'animation est gérée uniquement via CSS (.sec.on animation). */
 if('IntersectionObserver' in window){
   const uxObserver = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if(!entry.isIntersecting) return;
       const el = entry.target;
-      el.style.animation = 'ux-fadeSlideUp .28s cubic-bezier(.22,1,.36,1) both';
+      /* Animer seulement si pas déjà visible */
+      if(el.dataset.uxAnimated) return;
+      el.dataset.uxAnimated = '1';
+      el.style.animationName = 'none';
+      requestAnimationFrame(() => {
+        el.style.animationName = '';
+      });
       uxObserver.unobserve(el);
     });
-  }, { threshold:0.08, rootMargin:'0px 0px -24px 0px' });
+  }, { threshold:0.05, rootMargin:'0px 0px -16px 0px' });
 
-  /* Observer les cartes déjà dans le DOM */
-  document.querySelectorAll('.card, .mc, .kpi, .obj-row').forEach(el => {
-    el.style.opacity = '0';
+  /* Observer uniquement les éléments statiques (hors .main) */
+  document.querySelectorAll('.bottom-nav, .top-bar').forEach(el => {
     uxObserver.observe(el);
   });
-
-  /* Re-observer après chaque rendu des onglets */
-  const _origRender = window.render;
-  if(typeof _origRender === 'function'){
-    window.render = function(){
-      _origRender();
-      setTimeout(() => {
-        document.querySelectorAll('.sec.on .mc').forEach(el => {
-          if(el.style.opacity === '0' || el.style.opacity === '') return;
-        });
-      }, 50);
-    };
-  }
 }
 
 /* ── 10. SAVE BADGE haptic ───────────────────────────── */
