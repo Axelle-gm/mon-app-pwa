@@ -382,9 +382,9 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
   </div>
   <div class="r2">
     <label>Mois :</label>
-    <input type="month" id="cur-month" style="width:auto;font-size:13px;" />
+    <input type="month" id="cur-month" style="width:auto;font-size:13px;" onchange="saveLS()" />
     <label style="margin-left:6px;">Mode :</label>
-    <select id="mode-sel" style="width:auto;font-size:12px;" onchange="render()">
+    <select id="mode-sel" style="width:auto;font-size:12px;" onchange="render();saveLS()">
       <option value="solo">Personne seule</option>
       <option value="couple">Couple</option>
     </select>
@@ -393,12 +393,12 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
     <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;">
       <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:140px;">
         <label style="font-size:12px;font-weight:700;color:var(--text2);white-space:nowrap;">💰 Mon revenu net</label>
-        <input type="number" id="inc1" value="2500" min="0" step="100" oninput="render()" style="flex:1;font-size:16px;font-weight:700;" />
+        <input type="number" id="inc1" value="2500" min="0" step="100" oninput="render();saveLS()" style="flex:1;font-size:16px;font-weight:700;" />
         <span style="font-size:12px;color:var(--text2);">€</span>
       </div>
       <div id="inc2w" style="display:none;flex:1;min-width:140px;align-items:center;gap:8px;">
         <label style="font-size:12px;font-weight:700;color:var(--text2);white-space:nowrap;">💰 Partenaire</label>
-        <input type="number" id="inc2" value="2000" min="0" step="100" oninput="render()" style="flex:1;font-size:16px;font-weight:700;" />
+        <input type="number" id="inc2" value="2000" min="0" step="100" oninput="render();saveLS()" style="flex:1;font-size:16px;font-weight:700;" />
         <span style="font-size:12px;color:var(--text2);">€</span>
       </div>
     </div>
@@ -440,16 +440,16 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:14px;">
       <div class="fld" style="margin-bottom:0;">
         <label>Salaire mensuel net (€)</label>
-        <input type="number" id="fu-net" placeholder="Ex : 2500" min="0" step="100" oninput="calcFU()" />
+        <input type="number" id="fu-net" placeholder="Ex : 2500" min="0" step="100" oninput="calcFU();saveLS()" />
         <span style="font-size:10px;color:var(--text2);">Si variable, entrez votre moyenne</span>
       </div>
       <div class="fld" style="margin-bottom:0;">
         <label>Revenu annuel brut (€) — optionnel</label>
-        <input type="number" id="fu-brut" placeholder="Ex : 36000" min="0" step="500" oninput="calcFU()" />
+        <input type="number" id="fu-brut" placeholder="Ex : 36000" min="0" step="500" oninput="calcFU();saveLS()" />
       </div>
       <div class="fld" style="margin-bottom:0;">
         <label>Situation professionnelle</label>
-        <select id="fu-sit" onchange="calcFU()">
+        <select id="fu-sit" onchange="calcFU();saveLS()">
           <option value="3">Salarié stable CDI — 3 mois</option>
           <option value="6" selected>Salarié avec famille — 6 mois</option>
           <option value="9">Indépendant / freelance — 9 mois</option>
@@ -458,7 +458,7 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
       </div>
       <div class="fld" style="margin-bottom:0;">
         <label>Nombre d'enfants à charge</label>
-        <select id="fu-enfants" onchange="calcFU()">
+        <select id="fu-enfants" onchange="calcFU();saveLS()">
           <option value="0">Aucun enfant</option>
           <option value="1">1 enfant (+0,5 mois)</option>
           <option value="2">2 enfants (+1 mois)</option>
@@ -481,10 +481,10 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
       <div style="font-weight:700;font-size:13px;margin-bottom:12px;">➕ J'alimente ou retire de ma réserve</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
         <div class="fld" style="margin-bottom:0;"><label>Date</label><input type="date" id="fu-op-date" /></div>
-        <div class="fld" style="margin-bottom:0;"><label>Description</label><input type="text" id="fu-op-label" placeholder="Ex : Virement Livret A..." /></div>
+        <div class="fld" style="margin-bottom:0;"><label>Description</label><input type="text" id="fu-op-label" placeholder="Ex : Virement Livret A..." oninput="saveLS()" /></div>
         <div class="fld" style="margin-bottom:0;"><label>Montant (€)</label><input type="number" id="fu-op-amt" placeholder="0" min="0" step="50" /></div>
         <div class="fld" style="margin-bottom:0;"><label>Type</label>
-          <select id="fu-op-type">
+          <select id="fu-op-type" onchange="saveLS()">
             <option value="inject_manual">Injection manuelle</option>
             <option value="retrait">Retrait</option>
           </select>
@@ -547,7 +547,7 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
     <div class="chdr"><span class="ct">🎯 Créer un nouvel objectif</span></div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:10px;">
       <div class="fld" style="margin-bottom:0;"><label>Type</label>
-        <select id="obj-type" onchange="updateObjIcon()">
+        <select id="obj-type" onchange="updateObjIcon();saveLS()">
           <option value="voyage">✈ Voyage / vacances</option>
           <option value="travaux">🔧 Travaux / rénovation</option>
           <option value="voiture">🚗 Achat voiture</option>
@@ -561,9 +561,9 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
         </select>
       </div>
       <div class="fld" style="margin-bottom:0;"><label>Nom du projet</label><input type="text" id="obj-name" placeholder="Ex : Voyage au Japon" /></div>
-      <div class="fld" style="margin-bottom:0;"><label>Montant cible (€)</label><input type="number" id="obj-target" placeholder="Ex : 3000" min="0" step="100" oninput="calcObj()" /></div>
-      <div class="fld" style="margin-bottom:0;"><label>Date cible</label><input type="month" id="obj-date" oninput="calcObj()" /></div>
-      <div class="fld" style="margin-bottom:0;"><label>Épargne mensuelle (€)</label><input type="number" id="obj-mensuel" placeholder="Ex : 100" min="0" step="10" value="0" oninput="calcObj()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Montant cible (€)</label><input type="number" id="obj-target" placeholder="Ex : 3000" min="0" step="100" oninput="calcObj();saveLS()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Date cible</label><input type="month" id="obj-date" oninput="calcObj();saveLS()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Épargne mensuelle (€)</label><input type="number" id="obj-mensuel" placeholder="Ex : 100" min="0" step="10" value="0" oninput="calcObj();saveLS()" /></div>
     </div>
     <div id="obj-calc-preview" style="font-size:12px;color:var(--text2);margin-bottom:8px;min-height:16px;"></div>
     <button class="primary" onclick="addObjectif()">+ Ajouter l'objectif</button>
@@ -630,12 +630,12 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
       <div class="tb">Calcul basé sur les <strong>intérêts composés</strong>. La règle des 4% indique ce que vous pouvez retirer chaque année. Ces projections sont indicatives — les rendements passés ne garantissent pas les performances futures.</div>
     </div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-top:14px;margin-bottom:14px;">
-      <div class="fld" style="margin-bottom:0;"><label>Âge actuel</label><input type="number" id="sim-age" value="30" min="18" max="70" step="1" oninput="runSim()" /></div>
-      <div class="fld" style="margin-bottom:0;"><label>Âge départ retraite</label><input type="number" id="sim-ret-age" value="65" min="40" max="80" step="1" oninput="runSim()" /></div>
-      <div class="fld" style="margin-bottom:0;"><label>Épargne mensuelle (€)</label><input type="number" id="sim-mensuel" value="300" min="0" step="50" oninput="runSim()" /></div>
-      <div class="fld" style="margin-bottom:0;"><label>Capital déjà épargné (€)</label><input type="number" id="sim-capital" value="0" min="0" step="1000" oninput="runSim()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Âge actuel</label><input type="number" id="sim-age" value="30" min="18" max="70" step="1" oninput="runSim();saveLS()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Âge départ retraite</label><input type="number" id="sim-ret-age" value="65" min="40" max="80" step="1" oninput="runSim();saveLS()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Épargne mensuelle (€)</label><input type="number" id="sim-mensuel" value="300" min="0" step="50" oninput="runSim();saveLS()" /></div>
+      <div class="fld" style="margin-bottom:0;"><label>Capital déjà épargné (€)</label><input type="number" id="sim-capital" value="0" min="0" step="1000" oninput="runSim();saveLS()" /></div>
       <div class="fld" style="margin-bottom:0;"><label>Rendement annuel estimé</label>
-        <select id="sim-taux" onchange="runSim()">
+        <select id="sim-taux" onchange="runSim();saveLS()">
           <option value="3">3% — Livret A / fonds euros</option>
           <option value="5">5% — Mixte prudent</option>
           <option value="7" selected>7% — ETF World historique</option>
@@ -643,7 +643,7 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
         </select>
       </div>
       <div class="fld" style="margin-bottom:0;"><label>Inflation estimée</label>
-        <select id="sim-inflation" onchange="runSim()">
+        <select id="sim-inflation" onchange="runSim();saveLS()">
           <option value="0">0% — Sans correction</option>
           <option value="2" selected>2% — Inflation moyenne</option>
           <option value="3">3% — Inflation élevée</option>
@@ -844,51 +844,155 @@ let userCode='';
 const LS_KEY='planfinancier_v8';
 
 function saveLS(){
+  /* Helper : lire un champ sans crasher si absent du DOM */
+  const v=id=>{const el=document.getElementById(id);return el?el.value:null;};
+
   const data={
+    /* ── Données métier ── */
     CATS:CATS.map(c=>({...c,items:[...c.items.map(i=>({...i}))]})),
     surplusLines:[...surplusLines],
     history:[...history],
     fuTarget,fuSolde,fuHistory:[...fuHistory],
-    surpFUConfirmed,objectifs:[...objectifs],
-    profile:{...profile},userCode,
-    inc1:document.getElementById('inc1').value,
-    inc2:document.getElementById('inc2').value,
-    mode:document.getElementById('mode-sel').value,
-    fuNet:document.getElementById('fu-net').value,
-    fuBrut:document.getElementById('fu-brut').value,
-    fuSit:document.getElementById('fu-sit').value,
-    fuEnfants:document.getElementById('fu-enfants').value,
-    curMonth:document.getElementById('cur-month').value
+    surpFUConfirmed,
+    objectifs:[...objectifs],
+    profile:{...profile},
+    userCode,
+
+    /* ── Onglet Budget ── */
+    inc1:v('inc1'),
+    inc2:v('inc2'),
+    mode:v('mode-sel'),
+    curMonth:v('cur-month'),
+
+    /* ── Onglet Fonds d'urgence ── */
+    fuNet:v('fu-net'),
+    fuBrut:v('fu-brut'),
+    fuSit:v('fu-sit'),
+    fuEnfants:v('fu-enfants'),
+    fuOpDate:v('fu-op-date'),
+    fuOpLabel:v('fu-op-label'),
+    fuOpType:v('fu-op-type'),
+
+    /* ── Onglet Surplus ── */
+    surpFuInject:v('surp-fu-inject'),
+
+    /* ── Onglet Objectifs (formulaire en cours) ── */
+    objType:v('obj-type'),
+    objName:v('obj-name'),
+    objTarget:v('obj-target'),
+    objDate:v('obj-date'),
+    objMensuel:v('obj-mensuel'),
+
+    /* ── Simulateur retraite ── */
+    simAge:v('sim-age'),
+    simRetAge:v('sim-ret-age'),
+    simMensuel:v('sim-mensuel'),
+    simCapital:v('sim-capital'),
+    simTaux:v('sim-taux'),
+    simInflation:v('sim-inflation'),
+
+    /* ── Profil utilisateur ── */
+    pPrenom:v('p-prenom'),
+    pSituation:v('p-situation'),
+    pIncType:v('p-inc-type'),
+    pIncFixed:v('p-inc-fixed'),
+    pInc2Fixed:v('p-inc2-fixed'),
+    pBrut:v('p-brut'),
+    pEnfants:v('p-enfants'),
+    pFuSit:v('p-fu-sit'),
+    pNotes:v('p-notes'),
+
+    /* ── Meta ── */
+    savedAt:new Date().toISOString(),
+    version:'v11'
   };
-  try{localStorage.setItem(LS_KEY,JSON.stringify(data));}catch(e){console.warn('LS save error',e);}
+
+  try{
+    localStorage.setItem(LS_KEY,JSON.stringify(data));
+  }catch(e){
+    /* Quota dépassé : on tente une sauvegarde allégée sans historique */
+    console.warn('[LS] Quota dépassé, sauvegarde allégée :', e.message);
+    try{
+      const light={...data,history:data.history.slice(-6),fuHistory:data.fuHistory.slice(-20)};
+      localStorage.setItem(LS_KEY,JSON.stringify(light));
+    }catch(e2){console.error('[LS] Sauvegarde impossible :', e2.message);}
+  }
   showSavedBadge();
 }
 
 function loadLS(){
+  /* Helper : set un champ sans crasher */
+  const s=(id,val)=>{if(val==null)return;const el=document.getElementById(id);if(el)el.value=val;};
+
   try{
     const raw=localStorage.getItem(LS_KEY);
-    if(!raw)return;
+    if(!raw){console.log('[LS] Aucune donnée sauvegardée — démarrage vierge.');return;}
     const d=JSON.parse(raw);
-    if(d.CATS)d.CATS.forEach((c,i)=>{if(CATS[i])CATS[i].items=c.items;});
-    if(d.surplusLines)surplusLines=d.surplusLines;
-    if(d.history)history=d.history;
+
+    /* ── Données métier ── */
+    if(d.CATS)d.CATS.forEach((saved,i)=>{if(CATS[i]&&saved.items)CATS[i].items=saved.items;});
+    if(Array.isArray(d.surplusLines))surplusLines=d.surplusLines;
+    if(Array.isArray(d.history))history=d.history;
     if(d.fuTarget!=null)fuTarget=d.fuTarget;
     if(d.fuSolde!=null)fuSolde=d.fuSolde;
-    if(d.fuHistory)fuHistory=d.fuHistory;
+    if(Array.isArray(d.fuHistory))fuHistory=d.fuHistory;
     if(d.surpFUConfirmed!=null)surpFUConfirmed=d.surpFUConfirmed;
-    if(d.objectifs)objectifs=d.objectifs;
-    if(d.profile)profile=d.profile;
+    if(Array.isArray(d.objectifs))objectifs=d.objectifs;
+    if(d.profile&&typeof d.profile==='object')profile=d.profile;
     if(d.userCode)userCode=d.userCode;
-    if(d.inc1)document.getElementById('inc1').value=d.inc1;
-    if(d.inc2)document.getElementById('inc2').value=d.inc2;
-    if(d.mode)document.getElementById('mode-sel').value=d.mode;
-    if(d.fuNet)document.getElementById('fu-net').value=d.fuNet;
-    if(d.fuBrut)document.getElementById('fu-brut').value=d.fuBrut;
-    if(d.fuSit)document.getElementById('fu-sit').value=d.fuSit;
-    if(d.fuEnfants)document.getElementById('fu-enfants').value=d.fuEnfants;
-    if(d.curMonth)document.getElementById('cur-month').value=d.curMonth;
+
+    /* ── Onglet Budget ── */
+    s('inc1',d.inc1);
+    s('inc2',d.inc2);
+    s('mode-sel',d.mode);
+    s('cur-month',d.curMonth||new Date().toISOString().slice(0,7));
+
+    /* ── Onglet Fonds d'urgence ── */
+    s('fu-net',d.fuNet);
+    s('fu-brut',d.fuBrut);
+    s('fu-sit',d.fuSit);
+    s('fu-enfants',d.fuEnfants);
+    s('fu-op-date',d.fuOpDate||new Date().toISOString().slice(0,10));
+    s('fu-op-label',d.fuOpLabel);
+    s('fu-op-type',d.fuOpType);
+
+    /* ── Onglet Surplus ── */
+    s('surp-fu-inject',d.surpFuInject);
+
+    /* ── Onglet Objectifs ── */
+    s('obj-type',d.objType);
+    s('obj-name',d.objName);
+    s('obj-target',d.objTarget);
+    s('obj-date',d.objDate);
+    s('obj-mensuel',d.objMensuel);
+
+    /* ── Simulateur retraite ── */
+    s('sim-age',d.simAge);
+    s('sim-ret-age',d.simRetAge);
+    s('sim-mensuel',d.simMensuel);
+    s('sim-capital',d.simCapital);
+    s('sim-taux',d.simTaux);
+    s('sim-inflation',d.simInflation);
+
+    /* ── Profil ── */
+    s('p-prenom',d.pPrenom);
+    s('p-situation',d.pSituation);
+    s('p-inc-type',d.pIncType);
+    s('p-inc-fixed',d.pIncFixed);
+    s('p-inc2-fixed',d.pInc2Fixed);
+    s('p-brut',d.pBrut);
+    s('p-enfants',d.pEnfants);
+    s('p-fu-sit',d.pFuSit);
+    s('p-notes',d.pNotes);
+
+    /* ── Reconstruire l'UI profil ── */
     applyProfileFields();
-  }catch(e){console.warn('LS load error',e);}
+
+    console.log('[LS] Données restaurées — sauvegardées le',d.savedAt||'inconnu');
+  }catch(e){
+    console.error('[LS] Erreur chargement, démarrage vierge :', e.message);
+    /* Ne pas crasher — l'app reste fonctionnelle avec des valeurs vides */
+  }
 }
 
 function showSavedBadge(){
@@ -1521,6 +1625,7 @@ function toggleIncType(){
 }
 function saveProfile(){
   const sit=document.getElementById('p-situation').value;
+  saveLS();
   const iw=document.getElementById('p-inc2-wrap');
   if(iw)iw.style.display=sit==='couple'?'block':'none';
   profile={
@@ -1642,12 +1747,33 @@ function exportXL(){
 /* ═══════════════════════════════════════
    INIT
 ═══════════════════════════════════════ */
+/* ── INIT — valeurs par défaut avant chargement ── */
 document.getElementById('cur-month').value=new Date().toISOString().slice(0,7);
 document.getElementById('fu-op-date').value=new Date().toISOString().slice(0,10);
+
+/* ── Chargement localStorage ── */
 loadLS();
+
+/* ── Rendu initial ── */
 render();
-if(fuTarget>0)calcFU();
-if(userCode)setTxt('code-disp-top','Code : '+userCode);
+
+/* ── Recalculs post-restauration ── */
+if(fuTarget>0||document.getElementById('fu-net').value){calcFU();}
+if(fuSolde>0){
+  const pct=fuTarget>0?Math.min(100,(fuSolde/fuTarget)*100):0;
+  updateFURing(pct);
+}
+if(userCode){setTxt('code-disp-top','Code : '+userCode);}
+
+/* ── Simulateur : recalculer si valeurs restaurées ── */
+const simAgeEl=document.getElementById('sim-age');
+if(simAgeEl&&simAgeEl.value)runSim();
+
+/* ── Objectifs : recalculer preview si form non vide ── */
+const objTargetEl=document.getElementById('obj-target');
+if(objTargetEl&&objTargetEl.value)calcObj();
+
+console.log('[INIT] Application chargée — localStorage restauré.')
 
 /* ── BOTTOM NAV HELPER ── */
 const _BNAV_TAB_MAP={
@@ -1694,45 +1820,26 @@ function syncNav(id){
 
 <!-- ═══ PWA — Service Worker Registration ═══ -->
 <script>
-if('serviceWorker' in navigator){
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js')
-      .then(reg => {
-        console.log('[PWA] Service Worker enregistré :', reg.scope);
-        /* Détection mise à jour disponible */
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          newWorker.addEventListener('statechange', () => {
-            if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-              /* Notifier l'utilisateur qu'une mise à jour est disponible */
-              console.log('[PWA] Mise à jour disponible — rechargement...');
-              newWorker.postMessage({type:'SKIP_WAITING'});
-              window.location.reload();
-            }
-          });
-        });
-      })
-      .catch(err => console.warn('[PWA] Service Worker non enregistré :', err));
-  });
+/* ═══════════════════════════════════════════════════
+   PWA — Service Worker & Install Prompt
+   Le SW n'est activé QUE sur un vrai domaine HTTPS.
+   En preview (claudeusercontent, localhost:...) il est
+   ignoré silencieusement pour éviter les erreurs 404.
+═══════════════════════════════════════════════════ */
+(function(){
+  /* Domaines de preview / développement où le SW ne doit PAS tourner */
+  const PREVIEW_HOSTS = [
+    'claudeusercontent.com',
+    '127.0.0.1',
+  ];
+  const host = window.location.hostname;
+  const isLocalFile = window.location.protocol === 'file:';
+  const isPreview = PREVIEW_HOSTS.some(h => host.includes(h));
+  const isLocalhost = host === 'localhost' || host === '127.0.0.1';
 
-  /* Prompt installation (bouton "Ajouter à l'écran d'accueil") */
+  /* Install prompt — fonctionne partout sauf preview */
   let deferredPrompt = null;
-  window.addEventListener('beforeinstallprompt', e => {
-    e.preventDefault();
-    deferredPrompt = e;
-    /* Afficher le bouton d'installation si présent dans l'UI */
-    const btn = document.getElementById('pwa-install-btn');
-    if(btn) btn.style.display = 'flex';
-  });
 
-  window.addEventListener('appinstalled', () => {
-    console.log('[PWA] Application installée avec succès !');
-    deferredPrompt = null;
-    const btn = document.getElementById('pwa-install-btn');
-    if(btn) btn.style.display = 'none';
-  });
-
-  /* Exposer la fonction d'installation globalement */
   window.installPWA = () => {
     if(deferredPrompt){
       deferredPrompt.prompt();
@@ -1742,7 +1849,72 @@ if('serviceWorker' in navigator){
       });
     }
   };
-}
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    const btn = document.getElementById('pwa-install-btn');
+    if(btn) btn.style.display = 'flex';
+  });
+
+  window.addEventListener('appinstalled', () => {
+    deferredPrompt = null;
+    const btn = document.getElementById('pwa-install-btn');
+    if(btn) btn.style.display = 'none';
+  });
+
+  /* Service Worker — uniquement sur un vrai domaine HTTPS */
+  if(!('serviceWorker' in navigator)){
+    console.log('[PWA] Service Worker non supporté par ce navigateur.');
+    return;
+  }
+  if(isLocalFile){
+    console.log('[PWA] Protocole file:// — SW désactivé (ouvrez via un serveur HTTP).');
+    return;
+  }
+  if(isPreview){
+    console.log('[PWA] Mode preview (' + host + ') — SW désactivé intentionnellement.');
+    console.log('[PWA] Sur votre domaine de production, le SW s'activera automatiquement.');
+    return;
+  }
+
+  /* Production ou localhost : enregistrement du SW */
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./service-worker.js', {scope: './'})
+      .then(reg => {
+        console.log('[PWA] ✅ Service Worker enregistré — scope :', reg.scope);
+
+        /* Détection et application des mises à jour */
+        reg.addEventListener('updatefound', () => {
+          const newWorker = reg.installing;
+          if(!newWorker) return;
+          newWorker.addEventListener('statechange', () => {
+            if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
+              console.log('[PWA] 🔄 Mise à jour disponible — application...');
+              newWorker.postMessage({type:'SKIP_WAITING'});
+              /* Petit délai pour que le SW prenne le contrôle */
+              setTimeout(() => window.location.reload(), 500);
+            }
+          });
+        });
+
+        /* Si déjà contrôlé par un SW précédent, vérifier les mises à jour */
+        if(navigator.serviceWorker.controller){
+          reg.update();
+        }
+      })
+      .catch(err => {
+        /* Erreur réelle en production — logguer clairement */
+        console.error('[PWA] ❌ Échec enregistrement SW :', err.message);
+        console.error('[PWA] Vérifiez que service-worker.js est accessible à la racine du domaine.');
+      });
+
+    /* Écouter les messages du SW (ex: skip waiting) */
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      console.log('[PWA] 🔄 Nouveau Service Worker actif');
+    });
+  });
+})();
 </script>
 </body>
 </html>
