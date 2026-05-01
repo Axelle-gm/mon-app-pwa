@@ -1843,100 +1843,124 @@ function syncNav(id){
 
 <!-- ═══ PWA — Service Worker Registration ═══ -->
 <script>
-/* ═══════════════════════════════════════════════════
-   PWA — Service Worker & Install Prompt
-   Le SW n'est activé QUE sur un vrai domaine HTTPS.
-   En preview (claudeusercontent, localhost:...) il est
-   ignoré silencieusement pour éviter les erreurs 404.
-═══════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════
+   PWA — Service Worker Registration & Auto-Update
+   ─────────────────────────────────────────────────────────
+   Désactivé silencieusement sur les domaines de preview.
+   Actif automatiquement en production HTTPS.
+   Le rechargement se fait via SW_UPDATED (pas de setTimeout).
+═══════════════════════════════════════════════════════════ */
 (function(){
-  /* Domaines de preview / développement où le SW ne doit PAS tourner */
-  const PREVIEW_HOSTS = [
-    'claudeusercontent.com',
-    '127.0.0.1',
-  ];
-  const host = window.location.hostname;
-  const isLocalFile = window.location.protocol === 'file:';
-  const isPreview = PREVIEW_HOSTS.some(h => host.includes(h));
-  const isLocalhost = host === 'localhost' || host === '127.0.0.1';
 
-  /* Install prompt — fonctionne partout sauf preview */
+  /* ── Domaines où le SW est intentionnellement désactivé ─── */
+  const PREVIEW_HOSTS = ['claudeusercontent.com', '127.0.0.1'];
+  const host        = window.location.hostname;
+  const isPreview   = PREVIEW_HOSTS.some(h => host.includes(h));
+  const isLocalFile = window.location.protocol === 'file:';
+
+  /* ── Bouton d'installation PWA ───────────────────────────── */
   let deferredPrompt = null;
 
   window.installPWA = () => {
-    if(deferredPrompt){
-      deferredPrompt.prompt();
-      deferredPrompt.userChoice.then(choice => {
-        if(choice.outcome === 'accepted') console.log('[PWA] Installation acceptée');
-        deferredPrompt = null;
-      });
-    }
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then(() => { deferredPrompt = null; });
   };
 
   window.addEventListener('beforeinstallprompt', e => {
     e.preventDefault();
     deferredPrompt = e;
     const btn = document.getElementById('pwa-install-btn');
-    if(btn) btn.style.display = 'flex';
+    if (btn) btn.style.display = 'flex';
   });
 
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
     const btn = document.getElementById('pwa-install-btn');
-    if(btn) btn.style.display = 'none';
+    if (btn) btn.style.display = 'none';
   });
 
-  /* Service Worker — uniquement sur un vrai domaine HTTPS */
-  if(!('serviceWorker' in navigator)){
-    console.log('[PWA] Service Worker non supporté par ce navigateur.');
+  /* ── Gardes ─────────────────────────────────────────────── */
+  if (!('serviceWorker' in navigator)) return;
+  if (isLocalFile) {
+    console.log('[PWA] file:// — SW désactivé. Utilisez un serveur HTTP.');
     return;
   }
-  if(isLocalFile){
-    console.log('[PWA] Protocole file:// — SW désactivé (ouvrez via un serveur HTTP).');
-    return;
-  }
-  if(isPreview){
-    console.log('[PWA] Mode preview (' + host + ') — SW désactivé intentionnellement.');
-    console.log('[PWA] Sur votre domaine de production, le SW s'activera automatiquement.');
+  if (isPreview) {
+    console.log('[PWA] Preview (' + host + ') — SW désactivé intentionnellement.');
     return;
   }
 
-  /* Production ou localhost : enregistrement du SW */
+  /* ── Écouter les messages du SW (SW_UPDATED → reload) ────── */
+  navigator.serviceWorker.addEventListener('message', event => {
+    if (!event.data?.type) return;
+
+    if (event.data.type === 'SW_UPDATED') {
+      /*
+       * Le SW vient d'activer une nouvelle version et nous notifie.
+       * On recharge la page pour que l'utilisateur ait le nouveau HTML.
+       * Note : on vérifie que la page n'est PAS en cours de saisie
+       * pour éviter de perdre des données en pleine frappe.
+       */
+      const activeEl = document.activeElement;
+      const isTyping = activeEl && ['INPUT','TEXTAREA','SELECT'].includes(activeEl.tagName);
+
+      if (!isTyping) {
+        console.log('[PWA] v' + event.data.version + ' disponible — rechargement...');
+        window.location.reload();
+      } else {
+        /*
+         * L'utilisateur est en train de saisir → on attend la fin
+         * de sa saisie pour recharger (max 30s)
+         */
+        console.log('[PWA] v' + event.data.version + ' prête — rechargement différé (saisie en cours)');
+        const reloadWhenIdle = () => {
+          const el = document.activeElement;
+          if (!el || !['INPUT','TEXTAREA','SELECT'].includes(el.tagName)) {
+            window.location.reload();
+          }
+        };
+        document.addEventListener('focusout', reloadWhenIdle, { once: true });
+        setTimeout(() => window.location.reload(), 30000);  // Fallback 30s
+      }
+    }
+  });
+
+  /* ── Écouter le changement de contrôleur ─────────────────── */
+  let swRefreshing = false;
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (swRefreshing) return;
+    swRefreshing = true;
+    console.log('[PWA] Nouveau Service Worker actif');
+    /* Ne pas recharger ici — on attend SW_UPDATED pour éviter le double reload */
+  });
+
+  /* ── Enregistrement du SW ────────────────────────────────── */
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./service-worker.js', {scope: './'})
+    navigator.serviceWorker
+      .register('./service-worker.js', { scope: './', updateViaCache: 'none' })
+      /*
+       * updateViaCache: 'none' → le navigateur vérifie TOUJOURS
+       * le SW sur le réseau, même si le cache HTTP dit qu'il est frais.
+       * Clé pour que les mises à jour soient détectées immédiatement.
+       */
       .then(reg => {
-        console.log('[PWA] ✅ Service Worker enregistré — scope :', reg.scope);
+        console.log('[PWA] ✅ SW enregistré — scope:', reg.scope);
 
-        /* Détection et application des mises à jour */
-        reg.addEventListener('updatefound', () => {
-          const newWorker = reg.installing;
-          if(!newWorker) return;
-          newWorker.addEventListener('statechange', () => {
-            if(newWorker.state === 'installed' && navigator.serviceWorker.controller){
-              console.log('[PWA] 🔄 Mise à jour disponible — application...');
-              newWorker.postMessage({type:'SKIP_WAITING'});
-              /* Petit délai pour que le SW prenne le contrôle */
-              setTimeout(() => window.location.reload(), 500);
-            }
-          });
-        });
+        /*
+         * Forcer la vérification de mise à jour à chaque chargement.
+         * Sans ça, le navigateur peut attendre jusqu'à 24h.
+         */
+        reg.update().catch(() => {});
 
-        /* Si déjà contrôlé par un SW précédent, vérifier les mises à jour */
-        if(navigator.serviceWorker.controller){
-          reg.update();
-        }
+        /* Vérification périodique toutes les 60 secondes */
+        setInterval(() => reg.update().catch(() => {}), 60_000);
       })
       .catch(err => {
-        /* Erreur réelle en production — logguer clairement */
-        console.error('[PWA] ❌ Échec enregistrement SW :', err.message);
-        console.error('[PWA] Vérifiez que service-worker.js est accessible à la racine du domaine.');
+        console.error('[PWA] ❌ Échec SW:', err.message);
       });
-
-    /* Écouter les messages du SW (ex: skip waiting) */
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      console.log('[PWA] 🔄 Nouveau Service Worker actif');
-    });
   });
+
 })();
 </script>
 </body>
