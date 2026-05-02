@@ -43,10 +43,21 @@ body {
   width: 100%;
   max-width: 420px;
 
-  margin: 0 auto; /* 👈 IMPORTANT */
-
+  margin: 0 auto;
   background: #f7f8fc;
-  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  height: 100vh; /* 👈 IMPORTANT */
+}
+@media (min-width: 768px) {
+  #app {
+    height: 90vh; /* 👈 évite que ça déborde */
+    border-radius: 30px;
+    overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  }
 }
 
 /* écran d'accueil centré */
