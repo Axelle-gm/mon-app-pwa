@@ -111,7 +111,25 @@ button::after {
 button:hover::after {
   left: 100%;
 }
+button {
+  position: relative;
+  overflow: hidden;
+}
 
+button span {
+  position: absolute;
+  border-radius: 50%;
+  transform: scale(0);
+  animation: ripple 0.6s linear;
+  background: rgba(255,255,255,0.5);
+}
+
+@keyframes ripple {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
 }
 @keyframes fadeUp {
   from {
@@ -2042,6 +2060,24 @@ if ('serviceWorker' in navigator) {
     });
   });
 })();
+</script>
+</script>
+
+<!-- TON SCRIPT ICI -->
+<script>
+document.querySelector("button").addEventListener("click", function(e) {
+  const circle = document.createElement("span");
+  const diameter = Math.max(this.clientWidth, this.clientHeight);
+  const radius = diameter / 2;
+
+  circle.style.width = circle.style.height = `${diameter}px`;
+  circle.style.left = `${e.clientX - this.offsetLeft - radius}px`;
+  circle.style.top = `${e.clientY - this.offsetTop - radius}px`;
+
+  this.appendChild(circle);
+
+  setTimeout(() => circle.remove(), 600);
+});
 </script>
 </body>
 </html>
