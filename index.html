@@ -27,13 +27,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 body {
-  background: linear-gradient(135deg, #7C6EFE, #4FACFE) !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
+  min-height: 100vh;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+
+  background: linear-gradient(135deg, #7C6EFE, #4FACFE);
+
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* 👈 IMPORTANT */
+}
+#app {
+  width: 100%;
+  max-width: 420px;
 }
 .home-content {
   display: flex;
