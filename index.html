@@ -27,15 +27,27 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <style>
 body {
-  min-height: 100vh;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, sans-serif;
 
-  background: linear-gradient(135deg, #7C6EFE, #4FACFE);
+  background: linear-gradient(135deg, #7C6EFE, #4FACFE) !important;
 
+  min-height: 100vh;
+}
+
+/* IMPORTANT : ton app prend toute la largeur */
+#app {
+  width: 100%;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* écran d'accueil centré */
+.home-content {
   display: flex;
   justify-content: center;
-  align-items: flex-start; /* 👈 IMPORTANT */
+  align-items: center;
+  min-height: 100vh;
 }
 #app {
   width: 100%;
