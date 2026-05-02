@@ -28,6 +28,47 @@
 <style>
 body {
   background: linear-gradient(135deg, #7C6EFE, #4FACFE) !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+}
+.home-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+.container {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.logo {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+h1 {
+  margin: 10px 0;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border-radius: 30px;
+  border: none;
+  background: #7C6EFE;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
 }
 /* ═══════════════════════════════════
    DESIGN SYSTEM — palette maquette
@@ -334,10 +375,14 @@ button.teal-btn{background:linear-gradient(135deg,var(--teal),var(--green));
   <!-- HOME SCREEN -->
 <div id="homeScreen">
   <div class="home-content">
-    <div class="logo">💸</div>
-    <h1>MonBudget</h1>
-    <p>Reprends le contrôle de ton argent 🔥</p>
-    <button id="startBtn">Commencer</button>
+
+    <div class="container">
+      <div class="logo">💸</div>
+      <h1>MonBudget</h1>
+      <p>Reprends le contrôle de ton argent 🔥</p>
+      <button id="startBtn">Commencer</button>
+    </div>
+
   </div>
 </div>
 
