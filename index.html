@@ -84,16 +84,34 @@ button {
   font-weight: bold;
   font-size: 16px;
   cursor: pointer;
-  transition: all 0.15s ease;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s ease;
+  box-shadow: 0 10px 25px rgba(124,110,254,0.4);
+}
+button:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 20px 40px rgba(124,110,254,0.6);
 }
 button:active {
-  transform: scale(0.92);
-  opacity: 0.85;
+  transform: scale(0.9);
+  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+}
+button::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,0.4), transparent);
+  transition: 0.5s;
 }
 
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+button:hover::after {
+  left: 100%;
+}
+
 }
 @keyframes fadeUp {
   from {
