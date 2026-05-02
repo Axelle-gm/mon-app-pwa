@@ -270,10 +270,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Helvetica Ne
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  right: 0;
 
-  height: 80px; /* IMPORTANT */
+  left: 50%;
+  transform: translateX(-50%); /* 👈 centre EXACT */
+
+  width: 100%;
+  max-width: 420px; /* 👈 CLÉ */
+
+  height: 80px;
   padding-bottom: env(safe-area-inset-bottom);
 
   background: var(--white);
